@@ -54,6 +54,9 @@
                       <%= posts[i].postedBy %>
                     </h3>
                   </a>
+                  <span class="hidden"><%= posts[i]._id%></span>
+                  <span class="m-2 text-end"><i class="far fa-trash-alt"></i></span>
+
                   <a href="/post/<%= posts[i].postedBy %>/<%= posts[i]._id %>">
                     <img src="../<%= posts[i].img %>" alt="">
                   </a>
@@ -75,7 +78,7 @@
       </div>
     </div>
 
-    <script src="/main.js"></script>
+    <script src="/profile.js"></script>
 
 </body>
 

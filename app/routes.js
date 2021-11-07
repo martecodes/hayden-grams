@@ -166,6 +166,16 @@ app.post('/makePost', upload.single('file-to-upload'), (req, res) => {
         res.send(result)
       })
     });
+
+  app.delete('/postDelete', (req, res) => {
+    console.log(req.body);
+    db.collection('posts').findOneAndDelete({
+      _id: ObjectId(req.body._id),
+    }, (err, result) => {
+      if (err) return res.send(500, err)
+      res.send(result)
+    })
+  });
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================
 // =============================================================================
