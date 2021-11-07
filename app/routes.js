@@ -22,10 +22,14 @@ const upload = multer({storage: storage});
     app.get('/profile', isLoggedIn, function(req, res) {
       let user = req.user
         db.collection('posts').find({postedBy: user.local.username}).toArray((err, result) => {
-          if (err) return console.log(err)
-          res.render('profile.ejs', {
-            user : req.user,
-            posts: result
+          db.collection('comments').find().toArray((err, mainResult) => {
+
+            if (err) return console.log(err)
+            res.render('profile.ejs', {
+              user: req.user,
+              posts: result,
+              comments: mainResult
+            })
           })
         })
     });
@@ -39,13 +43,16 @@ const upload = multer({storage: storage});
     //feed page
     app.get('/feed', function(req, res) {
       db.collection('posts').find().toArray((err, result) => {
-        if (err) return console.log(err)
-        res.render('feed.ejs', {
-          posts: result,
-          user: result
+        db.collection('comments').find().toArray((err, mainResult) => {
+          if (err) return console.log(err)
+          res.render('feed.ejs', {
+            user: req.user,
+            posts: result,
+            comments: mainResult
+          })
         })
       })
-  });
+    });
   //post page
   app.get('/post/:username/:postId', isLoggedIn, function(req, res) {
     let postId = ObjectId(req.params.postId)
@@ -56,6 +63,7 @@ const upload = multer({storage: storage});
       db.collection('comments').find({
         postId: req.params.postId
       }).toArray((err, mainResult) =>{
+        
         if (err) return console.log(err)
         res.render('post.ejs', {
           posts: result,
@@ -70,10 +78,13 @@ const upload = multer({storage: storage});
 app.get('/page/:username', isLoggedIn, function(req, res) {
   let user = req.params.username;
   db.collection('posts').find({postedBy: user}).toArray((err, result) => {
-    if (err) return console.log(err)
-    res.render('page.ejs', {
-      user: req.user,
-      posts: result
+    db.collection('comments').find().toArray((err, mainResult) => {
+      if (err) return console.log(err)
+      res.render('page.ejs', {
+        user: req.user,
+        posts: result,
+        comments: mainResult
+      })
     })
   })
 });
@@ -90,7 +101,10 @@ app.post('/makePost', upload.single('file-to-upload'), (req, res) => {
   db.collection('posts').insertOne({
     caption: req.body.caption, 
     img: 'images/uploads/' + req.file.filename, 
-    postedBy: user.local.username, likes: 0, liked: false
+    postedBy: user.local.username, 
+    likes: 0, 
+    liked: false,
+    commentsTotal: 0
   }, (err, result) => {
     if (err) return console.log(err)
     res.redirect('/feed')
@@ -119,14 +133,14 @@ app.post('/makePost', upload.single('file-to-upload'), (req, res) => {
 // message board routes ===============================================================
 
     app.put('/postLikes', (req, res) => {
-      console.log(req.body);
+      
       db.collection('posts')
       .findOneAndUpdate({_id: ObjectId(req.body._id)}, {
         $inc: {
-          likes: 1
+          likes: 1,
         },
         $set: {
-          liked: true
+          liked: true,
         }
       }, {
         sort: {_id: -1},
@@ -136,9 +150,8 @@ app.post('/makePost', upload.single('file-to-upload'), (req, res) => {
         res.send(result)
       })
     });
-
+  
   app.put('/commentLikes', (req, res) => {
-    console.log(req.body);
     db.collection('comments')
       .findOneAndUpdate({ _id: ObjectId(req.body._id) }, {
         $inc: {
@@ -157,7 +170,7 @@ app.post('/makePost', upload.single('file-to-upload'), (req, res) => {
   });
 
     app.delete('/commentDelete', (req, res) => {
-      console.log(req.body);
+    
       db.collection('comments').findOneAndDelete({
         _id: ObjectId(req.body._id), 
         comment: req.body.comment
@@ -168,7 +181,7 @@ app.post('/makePost', upload.single('file-to-upload'), (req, res) => {
     });
 
   app.delete('/postDelete', (req, res) => {
-    console.log(req.body);
+    
     db.collection('posts').findOneAndDelete({
       _id: ObjectId(req.body._id),
     }, (err, result) => {

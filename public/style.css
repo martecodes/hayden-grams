@@ -35,9 +35,9 @@ a:hover{
 }
 
 .comments{
-  word-wrap: break-word;
+  overflow-wrap: normal;
   height: 200px;
-  width: 300px;
+  width: 370px;
   font-size: 16px !important;
   border-radius: 3%;
   border-style: none;

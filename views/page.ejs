@@ -26,6 +26,9 @@
             <a href="/newpost" class="btn btn-primary m-1">New Post</a>
           </li>
           <li class="nav-item">
+            <a href="/feed" class="btn btn-secondary m-1">Feed</a>
+          </li>
+          <li class="nav-item">
             <a href="/profile" class="btn btn-secondary m-1">Profile</a>
           </li>
           <li class="nav-item">
@@ -37,15 +40,15 @@
     </nav>
 
     <div class="d-flex justify-content-center mt-5">
-    
-      <!-- LOCAL INFORMATION -->
-    
       <div class="text-center mt-5">
-    
         <h3>Posts</h3>
-        <ul class="messages d-flex">
+        <ul class="messages">
           <% for(let i=posts.length - 1; i>= 0; i--) {%>
-            <li class="message card index-card p-5 m-3">
+            <% let color %>
+              <% if(posts[i].liked===true){%>
+                <% color='red' %>
+                  <%}%>
+            <li class="message card index-card mb-5 pb-3 p-5">
               <a href="/page/<%= posts[i].postedBy %>">
                 <h4>
                   <%= posts[i].postedBy %>
@@ -57,6 +60,15 @@
               <h4>
                 <%= posts[i].caption %>
               </h4>
+              <span class="likes">
+                <%= posts[i].likes %>
+              </span>
+              <span><i class="fas fa-heart postHeart m-2" style="color: <%= color%>"></i></span>
+              
+              <span class="likes">
+                <%=comments.filter(item=> item.postId == posts[i]._id).length%>
+              </span>
+              <span><a href="/post/<%= posts[i].postedBy %>/<%= posts[i]._id %>"><i class="far fa-comment m-2"></a></i></span>
             </li>
             <% } %>
         </ul>

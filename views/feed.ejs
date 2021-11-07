@@ -40,6 +40,7 @@
             <% if(posts[i].liked === true){%>
                 <% color='red' %>
               <%}%>
+            
               <li class="message card index-card mb-5 pb-3 p-5">
                 <span class="hidden">
                   <%= posts[i]._id %>
@@ -63,12 +64,14 @@
                   <span class="likes">
                     <%= posts[i].likes %>
                   </span>
-                    <span><i class="fas fa-heart postHeart" style="color: <%= color%>"></i></span>
-                    <span><a href="/post/<%= posts[i].postedBy %>/<%= posts[i]._id %>"><i class="far fa-comment m-2"></a></i></span>
+                  <span><i class="fas fa-heart postHeart m-2" style="color: <%= color%>"></i></span>
+                 
+                  <span class="likes"><%=comments.filter(item => item.postId == posts[i]._id).length%></span>
+                  <span><a href="/post/<%= posts[i].postedBy %>/<%= posts[i]._id %>"><i class="far fa-comment m-2"></a></i></span>
+                  <% } %>
                 </div>
 
               </li>
-              <% } %>
             </ul>
       </div>
     </div>

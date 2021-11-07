@@ -69,6 +69,9 @@
                       <%= posts[i].likes %>
                     </span>
                     <span><i class="fas fa-heart postHeart" style="color: <%= color%>"></i></span>
+                    <span class="likes">
+                      <%=comments.filter(item=> item.postId == posts[i]._id).length%>
+                    </span>
                     <span><a href="/post/<%= posts[i].postedBy %>/<%= posts[i]._id %>"><i
                           class="far fa-comment m-2"></a></i></span>
                   </div>
