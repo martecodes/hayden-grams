@@ -1,6 +1,7 @@
 # Hayden Grams
 Instagram but better
-![gram](https://user-images.githubusercontent.com/88953222/141207651-70f6695e-15b9-4a0d-bdb8-c3c3815cc84e.png)
+
+![gram](https://user-images.githubusercontent.com/88953222/142729353-8f532110-386f-4012-9465-c5fea673863a.png)
 
 
 How it's made Tech used: HTML, CSS, JavaScript,Bootstrap, Node.js, Express, MongoDB. Creating a collection that holds users posts. And another collection that holds comments based on that post.This project was fun to create.
